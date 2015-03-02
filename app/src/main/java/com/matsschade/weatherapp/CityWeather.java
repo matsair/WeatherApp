@@ -27,11 +27,16 @@ import org.json.JSONObject;
 import com.matsschade.weatherapp.Location;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class CityWeather extends ActionBarActivity {
+
+    private static String IMG_URL = "http://openweathermap.org/img/w/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class CityWeather extends ActionBarActivity {
 
         final TextView mResponse = (TextView) findViewById(R.id.response);
         final TextView nResponse = (TextView) findViewById(R.id.nresponse);
-
+        final TextView oResponse = (TextView) findViewById(R.id.oresponse);
 
 
         //setContentView(R.layout.activity_city_weather);
@@ -72,6 +77,10 @@ public class CityWeather extends ActionBarActivity {
                             nResponse.setText(c.getString("name"));
                             JSONObject d = c.getJSONObject("main");
                             mResponse.setText(d.getString("temp"));
+
+                            JSONArray e = c.getJSONArray("weather");
+                            JSONObject f = e.getJSONObject(0);
+                            oResponse.setText(f.getString("main"));
                         }
                         catch (JSONException e) {
                             Log.d("JSON", "Error");
