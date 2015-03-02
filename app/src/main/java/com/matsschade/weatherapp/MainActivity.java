@@ -29,6 +29,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     TextView mLatitudeText;
     TextView mLongitudeText;
 
+    public String LATITUDE;
+    public String LONGITUDE;
+
     public static final String TAG = "WeatherApp";
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
@@ -85,6 +88,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         if (mLastLocation != null) {
             mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
             mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+            LATITUDE =  String.valueOf((int) mLastLocation.getLatitude());
+            LONGITUDE = String.valueOf((int) mLastLocation.getLongitude());
         }
     }
 
@@ -128,6 +133,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     /** Called when the user clicks the Send button */
     public void startCityWeather(View view) {
         Intent intent = new Intent(this, CityWeather.class);
+
+        intent.putExtra("latitude", LATITUDE);
+        intent.putExtra("longitude", LONGITUDE);
         startActivity(intent);
     }
 }

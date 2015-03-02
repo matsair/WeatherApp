@@ -15,34 +15,63 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 
 public class CityWeather extends ActionBarActivity {
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
+        String latitude = intent.getStringExtra("latitude");
+        String longitude = intent.getStringExtra("longitude");
 
         setContentView(R.layout.activity_city_weather);
 
         final TextView mResponse = (TextView) findViewById(R.id.response);
 
+
+
+
         //setContentView(R.layout.activity_city_weather);
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://api.openweathermap.org/data/2.5/box/city?bbox=12,32,15,37,10&cluster=yes";
+        String partOne = "http://api.openweathermap.org/data/2.5/weather?lat=";
+        String partTwo = latitude;
+        String partThree = "&lon=";
+        String partFour = longitude;
+        String url =  partOne + partTwo + partThree + partFour;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Log.d("Response is: ", response.substring(0, 500));
+                        // Access the elements in the JSON response
+                        try {
+                            JSONObject reader = new JSONObject(response);
+                            JSONObject sys  = reader.getJSONObject("sys");
+                            mResponse.setText(sys.getString("country"));
+                        }
+                        catch (JSONException e) {
+
+                        }
+
+                        Log.d("Response is: ", response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -52,6 +81,8 @@ public class CityWeather extends ActionBarActivity {
         });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+
+
     }
 
 
