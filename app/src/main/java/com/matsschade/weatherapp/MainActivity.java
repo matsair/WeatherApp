@@ -21,6 +21,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONException;
+
 
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -88,8 +90,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         if (mLastLocation != null) {
             mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
             mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-            LATITUDE =  String.valueOf((int) mLastLocation.getLatitude());
-            LONGITUDE = String.valueOf((int) mLastLocation.getLongitude());
+            LATITUDE =  String.valueOf(mLastLocation.getLatitude());
+            LONGITUDE = String.valueOf(mLastLocation.getLongitude());
         }
     }
 
@@ -133,7 +135,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     /** Called when the user clicks the Send button */
     public void startCityWeather(View view) {
         Intent intent = new Intent(this, CityWeather.class);
-
         intent.putExtra("latitude", LATITUDE);
         intent.putExtra("longitude", LONGITUDE);
         startActivity(intent);

@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.matsschade.weatherapp.Location;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,7 +44,7 @@ public class CityWeather extends ActionBarActivity {
         setContentView(R.layout.activity_city_weather);
 
         final TextView mResponse = (TextView) findViewById(R.id.response);
-
+        final TextView nResponse = (TextView) findViewById(R.id.nresponse);
 
 
 
@@ -50,11 +52,12 @@ public class CityWeather extends ActionBarActivity {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String partOne = "http://api.openweathermap.org/data/2.5/weather?lat=";
+        String partOne = "http://api.openweathermap.org/data/2.5/find?lat=";
         String partTwo = latitude;
         String partThree = "&lon=";
         String partFour = longitude;
-        String url =  partOne + partTwo + partThree + partFour;
+        String partFive = "&cnt=10";
+        String url =  partOne + partTwo + partThree + partFour + partFive;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -63,12 +66,15 @@ public class CityWeather extends ActionBarActivity {
                     public void onResponse(String response) {
                         // Access the elements in the JSON response
                         try {
-                            JSONObject reader = new JSONObject(response);
-                            JSONObject sys  = reader.getJSONObject("sys");
-                            mResponse.setText(sys.getString("country"));
+                            JSONObject a = new JSONObject(response);
+                            JSONArray b = a.getJSONArray("list");
+                            JSONObject c = b.getJSONObject(1);
+                            nResponse.setText(c.getString("name"));
+                            JSONObject d = c.getJSONObject("main");
+                            mResponse.setText(d.getString("temp"));
                         }
                         catch (JSONException e) {
-
+                            Log.d("JSON", "Error");
                         }
 
                         Log.d("Response is: ", response);
