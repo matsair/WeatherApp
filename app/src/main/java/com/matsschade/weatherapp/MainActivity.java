@@ -1,13 +1,22 @@
 package com.matsschade.weatherapp;
 
+import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -21,6 +30,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     TextView mLongitudeText;
 
     public static final String TAG = "WeatherApp";
+
+    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +111,23 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         // Disconnect from Location API
         if (mClient.isConnected()) {
             mClient.disconnect();
-            Log.i(TAG, "Disconnected");
+            Log.i(TAG, "Disconnected onStop");
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onStop();
+        // Disconnect from Location API
+        if (mClient.isConnected()) {
+            mClient.disconnect();
+            Log.i(TAG, "Disconnected onDestroy");
+        }
+    }
 
+    /** Called when the user clicks the Send button */
+    public void startCityWeather(View view) {
+        Intent intent = new Intent(this, CityWeather.class);
+        startActivity(intent);
+    }
 }
