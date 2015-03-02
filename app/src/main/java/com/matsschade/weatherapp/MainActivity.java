@@ -3,6 +3,7 @@ package com.matsschade.weatherapp;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -19,10 +20,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     TextView mLatitudeText;
     TextView mLongitudeText;
 
+    public static final String TAG = "WeatherApp";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(TAG, "MainActivity Started");
 
         mLatitudeText = (TextView) findViewById(R.id.latitude);
         mLongitudeText = (TextView) findViewById(R.id.longitude);
@@ -63,6 +68,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        Log.d("Connection", "Connection Successful");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mClient);
         if (mLastLocation != null) {
@@ -73,11 +79,29 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void onConnectionSuspended(int i) {
-        //TODO
+        Log.d("Connection", "Connection suspended");
     }
 
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        //TODO
+        Log.d("Connection", "Connection Failed");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Connect to the Location API
+        Log.i(TAG, "Connecting...");
+        mClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Disconnect from Location API
+        if (mClient.isConnected()) {
+            mClient.disconnect();
+            Log.i(TAG, "Disconnected");
+        }
     }
 
 
