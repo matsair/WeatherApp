@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">WeatherApp</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
     <string name="action_settings">Settings</string>
 </resources>
