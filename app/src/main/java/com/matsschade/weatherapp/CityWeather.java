@@ -15,23 +15,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.matsschade.weatherapp.Location;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 
 public class CityWeather extends ActionBarActivity {
@@ -48,9 +34,9 @@ public class CityWeather extends ActionBarActivity {
 
         setContentView(R.layout.activity_city_weather);
 
-        final TextView mResponse = (TextView) findViewById(R.id.response);
-        final TextView nResponse = (TextView) findViewById(R.id.nresponse);
-        final TextView oResponse = (TextView) findViewById(R.id.oresponse);
+        final TextView mResponse = (TextView) findViewById(R.id.temp);
+        final TextView nResponse = (TextView) findViewById(R.id.cityname);
+        final TextView oResponse = (TextView) findViewById(R.id.description);
 
 
         //setContentView(R.layout.activity_city_weather);
