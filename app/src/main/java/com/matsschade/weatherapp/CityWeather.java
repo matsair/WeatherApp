@@ -34,12 +34,22 @@ public class CityWeather extends ActionBarActivity {
 
         setContentView(R.layout.activity_city_weather);
 
-        final TextView mResponse = (TextView) findViewById(R.id.temp);
-        final TextView nResponse = (TextView) findViewById(R.id.cityname);
-        final TextView oResponse = (TextView) findViewById(R.id.description);
+        final TextView oneTemp = (TextView) findViewById(R.id.temp);
+        final TextView oneName = (TextView) findViewById(R.id.cityname);
+        final TextView oneDesc = (TextView) findViewById(R.id.description);
 
+        final TextView twoTemp = (TextView) findViewById(R.id.temp2);
+        final TextView twoName = (TextView) findViewById(R.id.city2name);
+        final TextView twoDesc = (TextView) findViewById(R.id.description2);
 
-        //setContentView(R.layout.activity_city_weather);
+        final TextView threeTemp = (TextView) findViewById(R.id.temp3);
+        final TextView threeName = (TextView) findViewById(R.id.city3name);
+        final TextView threeDesc = (TextView) findViewById(R.id.description3);
+
+        final TextView fourTemp = (TextView) findViewById(R.id.temp4);
+        final TextView fourName = (TextView) findViewById(R.id.city4name);
+        final TextView fourDesc = (TextView) findViewById(R.id.description4);
+
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -60,13 +70,21 @@ public class CityWeather extends ActionBarActivity {
                             JSONObject a = new JSONObject(response);
                             JSONArray b = a.getJSONArray("list");
                             JSONObject c = b.getJSONObject(1);
-                            nResponse.setText(c.getString("name"));
+                            oneName.setText(c.getString("name"));
                             JSONObject d = c.getJSONObject("main");
-                            mResponse.setText(d.getString("temp"));
-
+                            oneTemp.setText(d.getString("temp"));
                             JSONArray e = c.getJSONArray("weather");
                             JSONObject f = e.getJSONObject(0);
-                            oResponse.setText(f.getString("main"));
+                            oneDesc.setText(f.getString("main"));
+
+                            JSONObject g = b.getJSONObject(2);
+                            twoName.setText(g.getString("name"));
+                            JSONObject h = g.getJSONObject("main");
+                            twoTemp.setText(d.getString("temp"));
+                            JSONArray i = g.getJSONArray("weather");
+                            JSONObject j = i.getJSONObject(0);
+                            twoDesc.setText(f.getString("main"));
+
                         }
                         catch (JSONException e) {
                             Log.d("JSON", "Error");

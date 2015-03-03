@@ -6,33 +6,151 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.matsschade.weatherapp.CityWeather">
 
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Desc."
         android:id="@+id/description"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="90dp" />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/temp"
+        android:layout_toEndOf="@+id/temp"
+        android:layout_marginLeft="81dp"
+        android:layout_marginStart="41dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Temp"
         android:id="@+id/temp"
-        android:layout_above="@+id/description"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp" />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/cityname"
+        android:layout_toEndOf="@+id/cityname"
+        android:layout_marginLeft="81dp"
+        android:layout_marginStart="41dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Name"
         android:id="@+id/cityname"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Name"
+        android:id="@+id/city2name"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/cityname"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Name"
+        android:id="@+id/city3name"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/city2name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Name"
+        android:id="@+id/city4name"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/city3name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Temp"
+        android:id="@+id/temp2"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/temp"
+        android:layout_toRightOf="@+id/city2name"
+        android:layout_toEndOf="@+id/city2name"
+        android:layout_marginLeft="81dp"
+        android:layout_marginStart="41dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Temp"
+        android:id="@+id/temp3"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/temp2"
+        android:layout_toRightOf="@+id/city3name"
+        android:layout_toEndOf="@+id/city3name"
+        android:layout_marginLeft="81dp"
+        android:layout_marginStart="41dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Temp"
+        android:id="@+id/temp4"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/temp3"
+        android:layout_toRightOf="@+id/city4name"
+        android:layout_toEndOf="@+id/city4name"
+        android:layout_marginLeft="81dp"
+        android:layout_marginStart="41dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Desc."
+        android:id="@+id/description2"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/description"
+        android:layout_toRightOf="@+id/temp2"
+        android:layout_toEndOf="@+id/temp2"
+        android:layout_marginLeft="81dp"
+        android:layout_marginStart="41dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Desc."
+        android:id="@+id/description3"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/description2"
+        android:layout_toRightOf="@+id/temp3"
+        android:layout_toEndOf="@+id/temp3"
+        android:layout_marginLeft="81dp"
+        android:layout_marginStart="41dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Desc."
+        android:id="@+id/description4"
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/description3"
+        android:layout_toRightOf="@+id/temp4"
+        android:layout_toEndOf="@+id/temp4"
+        android:layout_marginLeft="81dp"
+        android:layout_marginStart="41dp"/>
 
 </RelativeLayout>
