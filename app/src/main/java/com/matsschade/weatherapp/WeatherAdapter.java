@@ -1,8 +1,6 @@
 package com.matsschade.weatherapp;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +10,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Mats on 06/03/15.
- */
-
 public class WeatherAdapter extends ArrayAdapter<Weather> {
     public WeatherAdapter(Context context, ArrayList<Weather> users) {
         super(context, 0, users);
@@ -23,20 +17,26 @@ public class WeatherAdapter extends ArrayAdapter<Weather> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         // Get the data item for this position
         Weather weather = getItem(position);
+
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_single, parent, false);
         }
-        // Lookup view for data population
-        TextView cityName = (TextView) convertView.findViewById(R.id.cityName2);
+
+        // Lookup the view that is to be populated
+        TextView cityName = (TextView) convertView.findViewById(R.id.cityName);
         TextView cityTemp = (TextView) convertView.findViewById(R.id.cityTemp);
         ImageView icon = (ImageView)   convertView.findViewById(R.id.icon);
-        // Populate the data into the template view using the data object
+
+        // Populate the data into list_single
         cityName.setText(weather.getCityName());
         cityTemp.setText(weather.getCityTemp());
+        // Thanks to Icons8 for the cloud icon. See http://icons8.com/web-app/649/Clouds
         icon.setImageResource(R.drawable.cloud);
+
         // Return the completed view to render on screen
         return convertView;
     }

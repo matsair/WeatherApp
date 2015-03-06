@@ -1,17 +1,16 @@
 package com.matsschade.weatherapp;
 
-/**
- * Created by Mats on 06/03/15.
- */
 public class Weather {
 
     private String cityName;
+    private int cityTempInt;
     private String cityTemp;
     private String Desc;
 
-    public Weather(String cityName, String cityTemp, String Desc){
+    public Weather(String cityName, double cityTempDouble, String Desc){
         this.cityName = cityName;
-        this.cityTemp = cityTemp;
+        this.cityTempInt = (int) cityTempDouble;
+        this.cityTemp = Integer.toString(cityTempInt) + " \u2103";
         this.Desc = Desc;
     }
 
@@ -37,5 +36,13 @@ public class Weather {
 
     public void setDesc(String desc) {
         Desc = desc;
+    }
+
+    public int getCityTempInt() {
+        return cityTempInt;
+    }
+
+    public void setCityTempInt(int cityTempInt) {
+        this.cityTempInt = cityTempInt;
     }
 }

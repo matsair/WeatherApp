@@ -14,19 +14,12 @@
         android:name="com.matsschade.weatherapp.AppController">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".IconHttpClient"
-            android:parentActivityName="com.matsschade.weatherapp.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.matsschade.weatherapp.MainActivity" />
         </activity>
     </application>
 

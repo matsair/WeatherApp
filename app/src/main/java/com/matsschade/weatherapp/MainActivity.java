@@ -1,30 +1,20 @@
 package com.matsschade.weatherapp;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -69,9 +58,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         setContentView(R.layout.weatherlist);
 
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Please wait...");
+        pDialog.setMessage("Dont't panic...");
         pDialog.setCancelable(false);
 
+        // Get current weather data based on current location
         buildGoogleApiClient();
 
         wAdapter = new WeatherAdapter(this, arrayOfWeather);
@@ -82,6 +72,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     private void getWeatherData() {
+
         showpDialog();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -89,16 +80,19 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG, response.toString());
 
                 try {
                     JSONArray b = response.getJSONArray("list");
+
+                    // Get weather data from OpenWeatherAPI and save them into Weather objects
                     for (int i = 0; i < b.length(); i++) {
                         JSONObject c = b.getJSONObject(i);
                         JSONObject d = c.getJSONObject("main");
                         JSONArray e = c.getJSONArray("weather");
                         JSONObject f = e.getJSONObject(0);
-                        Weather weather = new Weather(c.getString("name"), d.getString("temp"), f.getString("main"));
+                        Weather weather = new Weather(c.getString("name"), d.getDouble("temp"), f.getString("main"));
+
+                        // Populate the WeatherAdapter with the weather objects
                         wAdapter.add(weather);
                         Log.d(TAG, f.getString("main"));
 
@@ -147,8 +141,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        // Refresh the list with current location and current weather data
+        if (id == R.id.refresh) {
+            wAdapter.clear();
+            mClient.disconnect();
+            mClient.connect();
             return true;
         }
 
@@ -190,6 +187,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         super.onStart();
         // Connect to the Location API
         Log.i(TAG, "Connecting...");
+        wAdapter.clear();
         mClient.connect();
     }
 
