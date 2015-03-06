@@ -6,7 +6,9 @@ It uses the OpenWeatherMap API for weather data.
 
 The icon was created with Android Asset Studio: http://romannurik.github.io/AndroidAssetStudio
 
-The cloud icon within the app was taken from Icons8: See http://icons8.com/web-app/649/Clouds
+The cloud icon within the app was taken from Icons8: http://icons8.com/web-app/649/Clouds
 
-Not yet implemented:
+
+
+##### Todo
 1. Update weather icons using icons from OpenWeatherAPI
