@@ -57,6 +57,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weatherlist);
+        setTitle(R.string.app_title);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Dont't panic...");

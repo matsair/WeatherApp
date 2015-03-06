@@ -13,8 +13,7 @@
         android:value="@integer/google_play_services_version"
         android:name="com.matsschade.weatherapp.AppController">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_title" >
+            android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
