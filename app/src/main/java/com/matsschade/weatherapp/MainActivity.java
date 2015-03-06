@@ -1,6 +1,7 @@
 package com.matsschade.weatherapp;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -116,7 +117,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                        "Are you connected to the internet?", Toast.LENGTH_SHORT).show();
                 // hide the progress dialog
                 hidepDialog();
             }
