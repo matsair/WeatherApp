@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -41,13 +42,18 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     GoogleApiClient mClient;
     Location mLastLocation;
 
-    String LATITUDE = "59";
-    String LONGITUDE = "4";
+    ArrayAdapter<String> mAdapter;
+    WeatherAdapter wAdapter;
+
+    String LATITUDE;
+    String LONGITUDE;
 
     private String jsonResponse;
 
     final String[] cityNames = new String[10];
     final String[] cityTemps = new String[10];
+
+    ArrayList<Weather> arrayOfWeather = new ArrayList<Weather>();
 
     // Progress dialog
     private ProgressDialog pDialog;
@@ -73,26 +79,19 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         buildGoogleApiClient();
 
-        url = BASE_URL + LATITUDE + MID_URL + LONGITUDE + END_URL;
+        wAdapter = new WeatherAdapter(this, arrayOfWeather);
 
-        Log.d(TAG, url);
-
-        makeJsonObjectRequest();
-
-        ArrayAdapter mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, cityNames);
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, cityNames);
 
         ListView lv = (ListView) findViewById(R.id.cityNameList);
 
-        lv.setAdapter(mAdapter);
-
-        final ImageView iv = (ImageView) findViewById(R.id.img);
+        lv.setAdapter(wAdapter);
 
 
 
     }
 
-    private void makeJsonObjectRequest() {
-
+    private void getWeatherData() {
         showpDialog();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -106,11 +105,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                     JSONArray b = response.getJSONArray("list");
                     for (int i = 0; i < b.length(); i++) {
                         JSONObject c = b.getJSONObject(i);
-                        cityNames[i] = c.getString("name");
                         JSONObject d = c.getJSONObject("main");
                         cityTemps[i] = (d.getString("temp"));
-                        Log.d(TAG, cityNames[i]);
+//                        Log.d(TAG, cityNames[i]);
                         Log.d(TAG, cityTemps[i]);
+                        Weather weather = new Weather(c.getString("name"), d.getString("temp"));
+                        wAdapter.add(weather);
 
                     }
 
@@ -122,6 +122,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 }
 
                 hidepDialog();
+                mAdapter.notifyDataSetChanged();
             }
 
 
@@ -180,6 +181,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         if (mLastLocation != null) {
             LATITUDE =  String.valueOf(mLastLocation.getLatitude());
             LONGITUDE = String.valueOf(mLastLocation.getLongitude());
+            url = BASE_URL + LATITUDE + MID_URL + LONGITUDE + END_URL;
+            getWeatherData();
         }
     }
 
