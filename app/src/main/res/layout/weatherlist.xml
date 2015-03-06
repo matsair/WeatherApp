@@ -7,9 +7,19 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
-    <ListView
-        android:id="@+id/list"
+
+    <TextView
+        android:id="@+id/t1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:text="Weather of Cities"
+        android:layout_centerHorizontal="true"/>
+
+
+    <ListView android:id="@+id/cityNameList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/t1"
+        />
+
 </RelativeLayout>
