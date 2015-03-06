@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.matsschade.weatherapp.CityWeather"
+            android:name=".IconHttpClient"
             android:parentActivityName="com.matsschade.weatherapp.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

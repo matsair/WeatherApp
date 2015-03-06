@@ -7,10 +7,12 @@ public class Weather {
 
     private String cityName;
     private String cityTemp;
+    private String Desc;
 
-    public Weather(String cityName, String cityTemp){
+    public Weather(String cityName, String cityTemp, String Desc){
         this.cityName = cityName;
         this.cityTemp = cityTemp;
+        this.Desc = Desc;
     }
 
     public String getCityName() {
@@ -27,5 +29,13 @@ public class Weather {
 
     public void setCityTemp(String cityTemp) {
         this.cityTemp = cityTemp;
+    }
+
+    public String getDesc() {
+        return Desc;
+    }
+
+    public void setDesc(String desc) {
+        Desc = desc;
     }
 }

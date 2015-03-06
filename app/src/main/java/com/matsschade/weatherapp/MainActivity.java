@@ -42,28 +42,23 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     GoogleApiClient mClient;
     Location mLastLocation;
 
-    ArrayAdapter<String> mAdapter;
     WeatherAdapter wAdapter;
 
     String LATITUDE;
     String LONGITUDE;
-
-    private String jsonResponse;
-
-    final String[] cityNames = new String[10];
-    final String[] cityTemps = new String[10];
 
     ArrayList<Weather> arrayOfWeather = new ArrayList<Weather>();
 
     // Progress dialog
     private ProgressDialog pDialog;
 
-    // json object response url
+    // The OpenWeatherAPI URL to request data from
     String url;
     private String BASE_URL = "http://api.openweathermap.org/data/2.5/find?lat=";
     private String MID_URL = "&lon=";
     private String END_URL = "&cnt=10&units=metric";
 
+    // The OpenWeatherAPI URL to request image data from
     private String imgUrl = "http://10.0.2.2:8080/TestAndroid/DownloadServlet?name=logo.png";
 
     public static final String TAG = "WeatherApp";
@@ -81,14 +76,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         wAdapter = new WeatherAdapter(this, arrayOfWeather);
 
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, cityNames);
-
         ListView lv = (ListView) findViewById(R.id.cityNameList);
 
         lv.setAdapter(wAdapter);
-
-
-
     }
 
     private void getWeatherData() {
@@ -106,11 +96,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                     for (int i = 0; i < b.length(); i++) {
                         JSONObject c = b.getJSONObject(i);
                         JSONObject d = c.getJSONObject("main");
-                        cityTemps[i] = (d.getString("temp"));
-//                        Log.d(TAG, cityNames[i]);
-                        Log.d(TAG, cityTemps[i]);
-                        Weather weather = new Weather(c.getString("name"), d.getString("temp"));
+                        JSONArray e = c.getJSONArray("weather");
+                        JSONObject f = e.getJSONObject(0);
+                        Weather weather = new Weather(c.getString("name"), d.getString("temp"), f.getString("main"));
                         wAdapter.add(weather);
+                        Log.d(TAG, f.getString("main"));
 
                     }
 
@@ -122,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 }
 
                 hidepDialog();
-                mAdapter.notifyDataSetChanged();
+                wAdapter.notifyDataSetChanged();
             }
 
 
