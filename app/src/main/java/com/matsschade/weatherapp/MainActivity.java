@@ -62,11 +62,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     protected Boolean mRequestingLocationUpdates;
 
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weatherlist);
         setTitle(R.string.app_title);
+        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiper);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Dont't panic...");
@@ -84,6 +87,13 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         ListView lv = (ListView) findViewById(R.id.cityNameList);
 
         lv.setAdapter(wAdapter);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshContent();
+            }
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
     }
 
     private void getWeatherData() {
@@ -158,16 +168,20 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         // Refresh the list with current location and current weather data
         if (id == R.id.refresh) {
-            wAdapter.clear();
-//            mClient.disconnect();
-//            mClient.connect();
-            createLocationRequest();
-            startLocationUpdates();
+            refreshContent();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void refreshContent(){
+        wAdapter.clear();
+//            mClient.disconnect();
+//            mClient.connect();
+        createLocationRequest();
+        startLocationUpdates();
+        }
 
     protected synchronized void buildGoogleApiClient() {
         mClient = new GoogleApiClient.Builder(this)
