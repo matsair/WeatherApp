@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weatherlist);
         setTitle(R.string.app_title);
-        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiper);
+        final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiper);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Dont't panic...");
@@ -91,6 +91,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             @Override
             public void onRefresh() {
                 refreshContent();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
@@ -179,8 +180,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         wAdapter.clear();
 //            mClient.disconnect();
 //            mClient.connect();
-        createLocationRequest();
-        startLocationUpdates();
+        getWeatherData();
         }
 
     protected synchronized void buildGoogleApiClient() {
@@ -189,6 +189,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        createLocationRequest();
     }
 
     protected void createLocationRequest() {
@@ -214,6 +215,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         LONGITUDE = String.valueOf(mLastLocation.getLongitude());
         url = BASE_URL + LATITUDE + MID_URL + LONGITUDE + END_URL;
         getWeatherData();
+        startLocationUpdates();
 
     }
 
@@ -221,17 +223,16 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        updateUI();
+        updateGeoData();
         Toast.makeText(this, getResources().getString(R.string.location_updated_message),
                 Toast.LENGTH_SHORT).show();
     }
 
-    private void updateUI() {
+    private void updateGeoData() {
         if (mLastLocation != null) {
             LATITUDE =  String.valueOf(mLastLocation.getLatitude());
             LONGITUDE = String.valueOf(mLastLocation.getLongitude());
             url = BASE_URL + LATITUDE + MID_URL + LONGITUDE + END_URL;
-            getWeatherData();
         }
     }
 
