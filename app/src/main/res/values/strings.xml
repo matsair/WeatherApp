@@ -2,4 +2,6 @@
     <string name="app_name">Weather App</string>
     <string name="app_title">Weather of Nearby Cities</string>
     <string name="settings_refresh">Refresh</string>
+    <string name="location_updated_message">Location updated!</string>
+    <string name="volley_error">"Are you connected to the internet?"</string>
 </resources>

@@ -1,8 +1,8 @@
 package com.matsschade.weatherapp;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.location.Location;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,29 +18,36 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
-public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    GoogleApiClient mClient;
-    Location mLastLocation;
+    protected GoogleApiClient mClient;
+    protected Location mLastLocation;
+    protected LocationRequest mLocationRequest;
 
-    WeatherAdapter wAdapter;
+    protected WeatherAdapter wAdapter;
 
-    String LATITUDE;
-    String LONGITUDE;
+    protected String LATITUDE;
+    protected String LONGITUDE;
+    protected String mLastUpdateTime;
 
-    ArrayList<Weather> arrayOfWeather = new ArrayList<Weather>();
+    protected ArrayList<Weather> arrayOfWeather = new ArrayList<Weather>();
 
     // Progress dialog
     private ProgressDialog pDialog;
+    private ProgressDialog lDialog;
 
     // The OpenWeatherAPI URL to request data from
     String url;
@@ -53,6 +60,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     public static final String TAG = "WeatherApp";
 
+    protected Boolean mRequestingLocationUpdates;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +71,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Dont't panic...");
         pDialog.setCancelable(false);
+
+        lDialog = new ProgressDialog(this);
+        lDialog.setMessage("Getting your location...");
+        lDialog.setCancelable(false);
 
         // Get current weather data based on current location
         buildGoogleApiClient();
@@ -118,7 +131,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
-                        "Are you connected to the internet?", Toast.LENGTH_SHORT).show();
+                        getResources().getString(R.string.volley_error), Toast.LENGTH_SHORT).show();
                 // hide the progress dialog
                 hidepDialog();
             }
@@ -146,8 +159,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         // Refresh the list with current location and current weather data
         if (id == R.id.refresh) {
             wAdapter.clear();
-            mClient.disconnect();
-            mClient.connect();
+//            mClient.disconnect();
+//            mClient.connect();
+            createLocationRequest();
+            startLocationUpdates();
             return true;
         }
 
@@ -162,11 +177,42 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 .build();
     }
 
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(20000);
+        mLocationRequest.setFastestInterval(10000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+    }
+
+    protected void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(mClient, mLocationRequest, this);
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mClient, this);
+    }
+
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.d("Connection", "Connection Successful");
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mClient);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
+        LATITUDE =  String.valueOf(mLastLocation.getLatitude());
+        LONGITUDE = String.valueOf(mLastLocation.getLongitude());
+        url = BASE_URL + LATITUDE + MID_URL + LONGITUDE + END_URL;
+        getWeatherData();
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+        mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        updateUI();
+        Toast.makeText(this, getResources().getString(R.string.location_updated_message),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateUI() {
         if (mLastLocation != null) {
             LATITUDE =  String.valueOf(mLastLocation.getLatitude());
             LONGITUDE = String.valueOf(mLastLocation.getLongitude());
@@ -178,6 +224,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public void onConnectionSuspended(int i) {
         Log.d("Connection", "Connection suspended");
+        mClient.connect();
     }
 
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -194,9 +241,15 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         // Disconnect from Location API
+        stopLocationUpdates();
         if (mClient.isConnected()) {
             mClient.disconnect();
             Log.i(TAG, "Disconnected onStop");
@@ -206,6 +259,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     protected void onDestroy() {
         super.onStop();
+        stopLocationUpdates();
         // Disconnect from Location API
         if (mClient.isConnected()) {
             mClient.disconnect();
@@ -216,6 +270,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private void showpDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
+    }
+
+    private void showlDialog() {
+        if (!lDialog.isShowing())
+            lDialog.show();
     }
 
     private void hidepDialog() {
