@@ -12,4 +12,7 @@ Tested on Nexus 5 and Galaxy S4.
 
 ##### Todo
 1. Update weather icons using icons from OpenWeatherAPI
-2. Fix bug were nothing is shown in the app. Caused by turning off GPS. Once GPS is turned on again, the bug persists.
+2. Fix bug were nothing is shown in the app. Caused by turning off GPS. Once GPS is turned on again, the bug persists
+3. Fix bug were app crashes when Wifi and Location are disabled
+4. Improve SwipeToRefresh
+5. Improve getting the users location
