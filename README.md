@@ -14,5 +14,5 @@ Tested on Nexus 5 and Galaxy S4.
 1. Update weather icons using icons from OpenWeatherAPI
 2. __FIXED__ Fix bug were nothing is shown in the app. Caused by turning off GPS. Once GPS is turned on again, the bug persists
 3. __FIXED__ Fix bug were app crashes when Wifi and Location are disabled
-4. __DONE__ Improve SwipeToRefresh
+4. __IN_PROGRESS__ Improve SwipeToRefresh. The icon needs to spin longer and the "Don't panic" dialog shouldn't be shown.
 5. __DONE__ Improve getting the users location
