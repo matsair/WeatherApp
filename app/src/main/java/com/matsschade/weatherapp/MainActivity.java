@@ -47,7 +47,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     // Progress dialog
     private ProgressDialog pDialog;
-    private ProgressDialog lDialog;
 
     // The OpenWeatherAPI URL to request data from
     String url;
@@ -60,10 +59,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     public static final String TAG = "WeatherApp";
 
-    protected Boolean mRequestingLocationUpdates;
-
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,12 +67,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiper);
 
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Dont't panic...");
+        pDialog.setMessage("Don't panic...");
         pDialog.setCancelable(false);
-
-        lDialog = new ProgressDialog(this);
-        lDialog.setMessage("Getting your location...");
-        lDialog.setCancelable(false);
 
         // Get current weather data based on current location
         buildGoogleApiClient();
@@ -120,8 +111,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
                         // Populate the WeatherAdapter with the weather objects
                         wAdapter.add(weather);
-                        Log.d(TAG, f.getString("main"));
-
                     }
 
                 } catch (JSONException e) {
@@ -177,11 +166,18 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     private void refreshContent(){
-        wAdapter.clear();
-//            mClient.disconnect();
-//            mClient.connect();
-        getWeatherData();
+        if (mLastLocation != null) {
+            wAdapter.clear();
+            startLocationUpdates();
+            getWeatherData();
+            stopLocationUpdates();
         }
+        else {
+            mClient.connect();
+            Toast.makeText(this, getResources().getString(R.string.location_error),
+                    Toast.LENGTH_SHORT).show();
+        }
+     }
 
     protected synchronized void buildGoogleApiClient() {
         mClient = new GoogleApiClient.Builder(this)
@@ -211,12 +207,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     public void onConnected(Bundle connectionHint) {
         Log.d("Connection", "Connection Successful");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
-        LATITUDE =  String.valueOf(mLastLocation.getLatitude());
-        LONGITUDE = String.valueOf(mLastLocation.getLongitude());
-        url = BASE_URL + LATITUDE + MID_URL + LONGITUDE + END_URL;
-        getWeatherData();
-        startLocationUpdates();
-
+        if (mLastLocation != null) {
+            LATITUDE = String.valueOf(mLastLocation.getLatitude());
+            LONGITUDE = String.valueOf(mLastLocation.getLongitude());
+            url = BASE_URL + LATITUDE + MID_URL + LONGITUDE + END_URL;
+            getWeatherData();
+        }
     }
 
     @Override
@@ -264,7 +260,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     protected void onStop() {
         super.onStop();
         // Disconnect from Location API
-        stopLocationUpdates();
         if (mClient.isConnected()) {
             mClient.disconnect();
             Log.i(TAG, "Disconnected onStop");
@@ -274,7 +269,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     protected void onDestroy() {
         super.onStop();
-        stopLocationUpdates();
         // Disconnect from Location API
         if (mClient.isConnected()) {
             mClient.disconnect();
@@ -285,11 +279,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private void showpDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
-    }
-
-    private void showlDialog() {
-        if (!lDialog.isShowing())
-            lDialog.show();
     }
 
     private void hidepDialog() {
