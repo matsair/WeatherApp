@@ -10,10 +10,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
-        android:contentDescription="TODO"/>
+        android:contentDescription="Icon"/>
 
     <TextView
-        android:id="@+id/cityName"
+        android:id="@+id/cityTemp"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
@@ -25,10 +25,10 @@
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/cityTemp"
+        android:id="@+id/cityName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/cityName"
+        android:layout_above="@id/cityTemp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
